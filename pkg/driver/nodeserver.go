@@ -26,9 +26,10 @@ const (
 )
 
 type nodeServer struct {
-	driver   *Driver
-	mount    mount.IMount
-	metadata metadata.IMetadata
+	driver            *Driver
+	mount             mount.IMount
+	metadata          metadata.IMetadata
+	maxVolumesPerNode int64
 	csi.UnimplementedNodeServer
 }
 
@@ -177,9 +178,13 @@ func (ns *nodeServer) NodeGetInfo(ctx context.Context, req *csi.NodeGetInfoReque
 		return nil, fmt.Errorf("failed to get node UUID: %v", err)
 	}
 	klog.Infof("NodeGetInfo called with nodeID: %#v\n", nodeID)
+	maxVolumes := ns.maxVolumesPerNode
+	if maxVolumes == 0 {
+		maxVolumes = 5 // Default to 5 if not configured
+	}
 	return &csi.NodeGetInfoResponse{
 		NodeId:            nodeID,
-		MaxVolumesPerNode: 5,
+		MaxVolumesPerNode: maxVolumes,
 		AccessibleTopology: &csi.Topology{
 			Segments: map[string]string{
 				"hyperstack.cloud/instance-id": nodeID,

@@ -18,6 +18,7 @@ components:
 
 hyperstack:
   apiAddress: "https://infrahub-api.nexgencloud.com/v1"
+  maxVolumesPerNode: 5
 
 storageClass:
   enabled: true

@@ -202,7 +202,7 @@ func (cs *controllerServer) ControllerPublishVolume(ctx context.Context, req *cs
 	if *getVolume.Status == "in-use" { //Volume is already attached
 		klog.Infof("ControllerPublishVolume: Volume %s is already in use", *getVolume.Name)
 		if len(*getVolume.Attachments) > 0 {
-			klog.Infof("ControllerPublishVolume: Volume %s is already attached to node %s", *getVolume.Name, *(*getVolume.Attachments)[0].InstanceId)
+			klog.Infof("ControllerPublishVolume: Volume %s is already attached to node %d", *getVolume.Name, *(*getVolume.Attachments)[0].InstanceId)
 			return &csi.ControllerPublishVolumeResponse{
 				PublishContext: map[string]string{
 					volNameKeyFromControllerPublishVolume: *(*getVolume.Attachments)[0].Device,

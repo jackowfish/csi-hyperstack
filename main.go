@@ -25,9 +25,11 @@ func main() {
 	_ = viper.BindEnv("hyperstack-api-key", "HYPERSTACK_API_KEY")
 	_ = viper.BindEnv("hyperstack-api-address", "HYPERSTACK_API_ADDRESS")
 	// _ = viper.BindEnv("hyperstack-environment", "HYPERSTACK_ENVIRONMENT")
+	_ = viper.BindEnv("max-volumes-per-node", "HYPERSTACK_MAX_VOLUMES_PER_NODE")
 	viper.SetDefault("endpoint", "unix://var/run/csi.sock")
 	viper.SetDefault("metrics-enabled", true)
 	viper.SetDefault("http-endpoint", ":8080")
+	viper.SetDefault("max-volumes-per-node", 5)
 
 	rootCmd := &cobra.Command{
 		Use:   name,
@@ -61,6 +63,7 @@ func main() {
 	flags.String("hyperstack-api-key", viper.GetString("hyperstack-api-key"), "Hyperstack API key (env: HYPERSTACK_API_KEY)")
 	flags.String("hyperstack-api-address", viper.GetString("hyperstack-api-address"), "Hyperstack API server address (env: HYPERSTACK_API_ADDRESS)")
 	// flags.String("hyperstack-environment", viper.GetString("hyperstack-environment"), "Hyperstack environment name")
+	flags.Int64("max-volumes-per-node", viper.GetInt64("max-volumes-per-node"), "Maximum number of volumes per node (env: HYPERSTACK_MAX_VOLUMES_PER_NODE)")
 	flags.Bool("service-controller-enabled", false, "Enables CSI controller service")
 	flags.Bool("service-node-enabled", false, "Enables CSI node service")
 
@@ -115,6 +118,7 @@ Global Flags:
 Environment variables:
   HYPERSTACK_API_KEY                 Hyperstack API key
   HYPERSTACK_API_ADDRESS             Hyperstack API server address
+  HYPERSTACK_MAX_VOLUMES_PER_NODE    Maximum number of volumes per node (default: 5)
 
 Use "{{.CommandPath}} [command] --help" for more information about a command.
 `
@@ -128,6 +132,7 @@ func driverStart(ctx context.Context) (err error) {
 		HyperstackApiKey:     viper.GetString("hyperstack-api-key"),
 		HyperstackApiAddress: viper.GetString("hyperstack-api-address"),
 		// Environment:          viper.GetString("hyperstack-environment"),
+		MaxVolumesPerNode: viper.GetInt64("max-volumes-per-node"),
 	})
 
 	drv.SetupIdentityService()

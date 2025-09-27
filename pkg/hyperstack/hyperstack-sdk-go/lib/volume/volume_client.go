@@ -21,7 +21,7 @@ import (
 type AttachmentsFieldsForVolume struct {
 	Device     *string `json:"device,omitempty"`
 	Id         *int    `json:"id,omitempty"`
-	InstanceId *string    `json:"instance_id,omitempty"`
+	InstanceId *int    `json:"instance_id,omitempty"`
 	Protected  *bool   `json:"protected,omitempty"`
 	Status     *string `json:"status,omitempty"`
 }
