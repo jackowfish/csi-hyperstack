@@ -16,7 +16,7 @@ spec:
     spec:
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
-        - name: {{ .Values.imagePullSecrets }}
+{{ toYaml .Values.imagePullSecrets | indent 8 }}
       {{- end }}
       serviceAccountName: csi-hyperstack-node-sa
       hostNetwork: true
@@ -63,6 +63,8 @@ spec:
               value: "hyperstack.csi.nexgencloud.com"
             - name: DRIVER_VERSION
               value: "v1.0.0"
+            - name: HYPERSTACK_MAX_VOLUMES_PER_NODE
+              value: "{{ .Values.hyperstack.maxVolumesPerNode }}"
             - name: KUBE_NODE_NAME
               valueFrom:
                 fieldRef:

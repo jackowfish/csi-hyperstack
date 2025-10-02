@@ -30,6 +30,7 @@ type DriverOpts struct {
 	// HyperstackNodeId     string
 	HyperstackApiKey     string
 	HyperstackApiAddress string
+	MaxVolumesPerNode    int64
 }
 
 var (
@@ -136,9 +137,10 @@ func (d *Driver) SetupControllerService() {
 func (d *Driver) SetupNodeService() {
 	klog.Info("Providing node service")
 	d.serviceNode = &nodeServer{
-		driver:   d,
-		mount:    mount.GetMountProvider(),
-		metadata: metadata.GetMetadataProvider(d.hyperstackClient.GetMetadataOpts().SearchOrder),
+		driver:            d,
+		mount:             mount.GetMountProvider(),
+		metadata:          metadata.GetMetadataProvider(d.hyperstackClient.GetMetadataOpts().SearchOrder),
+		maxVolumesPerNode: d.opts.MaxVolumesPerNode,
 	}
 }
 
