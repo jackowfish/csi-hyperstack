@@ -240,7 +240,7 @@ func (ns *nodeServer) NodeGetInfo(ctx context.Context, req *csi.NodeGetInfoReque
 	klog.Infof("NodeGetInfo called with nodeID: %#v\n", nodeID)
 	return &csi.NodeGetInfoResponse{
 		NodeId:            nodeID,
-		MaxVolumesPerNode: 10,
+		MaxVolumesPerNode: 25,
 		AccessibleTopology: &csi.Topology{
 			Segments: map[string]string{
 				"hyperstack.cloud/instance-id": nodeID,
